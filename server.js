@@ -11,7 +11,7 @@ const generateUUID = () => {
 };
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 // Middleware
 app.set('view engine', 'ejs');
