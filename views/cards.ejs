@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cards - SecureBank</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1>🏦 SecureBank</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/accounts">Accounts</a></li>
+            <li><a href="/transfer">Transfer</a></li>
+            <li><a href="/transactions">Transactions</a></li>
+            <li><a href="/cards">Cards</a></li>
+            <li><a href="/loans">Loans</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/logout" class="logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-container">
+        <h2>Your Cards</h2>
+        
+        <div class="cards-grid">
+            <% if (cards.length === 0) { %>
+                <p class="no-data">You don't have any cards yet. Request one below!</p>
+            <% } else { %>
+                <% cards.forEach(card => { %>
+                    <div class="card-display <%= card.cardType %>">
+                        <div class="card-header">
+                            <span class="card-type"><%= card.cardType.toUpperCase() %></span>
+                            <span class="card-status status-<%= card.status %>"><%= card.status %></span>
+                        </div>
+                        <div class="card-number"><%= card.cardNumber %></div>
+                        <div class="card-footer">
+                            <span class="card-holder"><%= card.expiryDate %></span>
+                            <span class="card-network">💳 SecureBank</span>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } %>
+        </div>
+
+        <h3>Request New Card</h3>
+        <form action="/cards/request" method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="accountId">Select Account</label>
+                <select id="accountId" name="accountId" required>
+                    <!-- Will be populated dynamically or user can select -->
+                    <option value="">Select an account...</option>
+                </select>
+                <small>Note: Please contact support to link accounts for card requests</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="cardType">Card Type</label>
+                <select id="cardType" name="cardType">
+                    <option value="debit">Debit Card</option>
+                    <option value="credit">Credit Card</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Request Card</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 SecureBank. All rights reserved.</p>
+    </footer>
+</body>
+</html>

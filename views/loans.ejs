@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loans - SecureBank</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1>🏦 SecureBank</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/accounts">Accounts</a></li>
+            <li><a href="/transfer">Transfer</a></li>
+            <li><a href="/transactions">Transactions</a></li>
+            <li><a href="/cards">Cards</a></li>
+            <li><a href="/loans">Loans</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/logout" class="logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-container">
+        <h2>Your Loans</h2>
+        
+        <div class="loans-list">
+            <% if (loans.length === 0) { %>
+                <p class="no-data">You don't have any loans yet. Apply for one below!</p>
+            <% } else { %>
+                <% loans.forEach(loan => { %>
+                    <div class="loan-card">
+                        <div class="loan-header">
+                            <span class="loan-type"><%= loan.loanType.toUpperCase() %> LOAN</span>
+                            <span class="loan-status status-<%= loan.status %>"><%= loan.status %></span>
+                        </div>
+                        <div class="loan-details">
+                            <div class="loan-detail">
+                                <label>Amount:</label>
+                                <span>$<%= loan.amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) %></span>
+                            </div>
+                            <div class="loan-detail">
+                                <label>Term:</label>
+                                <span><%= loan.term %> months</span>
+                            </div>
+                            <div class="loan-detail">
+                                <label>Interest Rate:</label>
+                                <span><%= loan.interestRate %>% APR</span>
+                            </div>
+                            <div class="loan-detail">
+                                <label>Applied:</label>
+                                <span><%= new Date(loan.appliedAt).toLocaleDateString() %></span>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } %>
+        </div>
+
+        <h3>Apply for a Loan</h3>
+        <form action="/loans/apply" method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="loanType">Loan Type</label>
+                <select id="loanType" name="loanType" required>
+                    <option value="personal">Personal Loan (8.5% APR)</option>
+                    <option value="home">Home Loan (6.5% APR)</option>
+                    <option value="auto">Auto Loan (12.0% APR)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="amount">Loan Amount ($)</label>
+                <input type="number" id="amount" name="amount" required 
+                       placeholder="10000" min="1000" step="100">
+            </div>
+
+            <div class="form-group">
+                <label for="term">Loan Term (months)</label>
+                <select id="term" name="term" required>
+                    <option value="12">12 months (1 year)</option>
+                    <option value="24">24 months (2 years)</option>
+                    <option value="36">36 months (3 years)</option>
+                    <option value="48">48 months (4 years)</option>
+                    <option value="60">60 months (5 years)</option>
+                    <option value="120">120 months (10 years)</option>
+                    <option value="180">180 months (15 years)</option>
+                    <option value="240">240 months (20 years)</option>
+                    <option value="360">360 months (30 years)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 SecureBank. All rights reserved.</p>
+    </footer>
+</body>
+</html>

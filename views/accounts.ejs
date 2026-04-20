@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounts - SecureBank</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1>🏦 SecureBank</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/accounts">Accounts</a></li>
+            <li><a href="/transfer">Transfer</a></li>
+            <li><a href="/transactions">Transactions</a></li>
+            <li><a href="/cards">Cards</a></li>
+            <li><a href="/loans">Loans</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/logout" class="logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-container">
+        <h2>Your Accounts</h2>
+        
+        <div class="accounts-grid">
+            <% accounts.forEach(account => { %>
+                <div class="account-card">
+                    <div class="account-header">
+                        <span class="account-type"><%= account.type.toUpperCase() %></span>
+                        <span class="account-status status-<%= account.status %>"><%= account.status %></span>
+                    </div>
+                    <div class="account-full-number"><%= account.accountNumber %></div>
+                    <div class="account-balance">$<%= account.balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) %></div>
+                    <div class="account-currency"><%= account.currency %></div>
+                    <a href="/accounts/<%= account.id %>" class="btn btn-primary">View Transactions</a>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 SecureBank. All rights reserved.</p>
+    </footer>
+</body>
+</html>
