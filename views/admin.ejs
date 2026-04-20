@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - SecureBank</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar admin-navbar">
+        <div class="nav-brand">
+            <h1>🏦 SecureBank Admin</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/admin" class="active">Admin Panel</a></li>
+            <li><a href="/logout" class="logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-container admin-container">
+        <h2>Admin Dashboard</h2>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Customers</h3>
+                <div class="stat-value"><%= stats.totalUsers %></div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Total Accounts</h3>
+                <div class="stat-value"><%= stats.totalAccounts %></div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Total Deposits</h3>
+                <div class="stat-value">$<%= stats.totalDeposits.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) %></div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Pending Loans</h3>
+                <div class="stat-value"><%= stats.pendingLoans %></div>
+            </div>
+        </div>
+
+        <h3>Loan Applications</h3>
+        <div class="loans-table-container">
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Term</th>
+                        <th>Interest</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (loans.length === 0) { %>
+                        <tr>
+                            <td colspan="7" class="no-data">No loan applications</td>
+                        </tr>
+                    <% } else { %>
+                        <% loans.forEach(loan => { %>
+                            <tr>
+                                <td><%= loan.userId.slice(0, 8) %>...</td>
+                                <td><%= loan.loanType.toUpperCase() %></td>
+                                <td>$<%= loan.amount.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0}) %></td>
+                                <td><%= loan.term %> months</td>
+                                <td><%= loan.interestRate %>%</td>
+                                <td>
+                                    <span class="loan-status status-<%= loan.status %>"><%= loan.status %></span>
+                                </td>
+                                <td>
+                                    <% if (loan.status === 'pending') { %>
+                                        <form action="/admin/approve-loan/<%= loan.id %>" method="POST" style="display:inline;">
+                                            <button type="submit" class="btn btn-small btn-success">Approve</button>
+                                        </form>
+                                        <form action="/admin/reject-loan/<%= loan.id %>" method="POST" style="display:inline;">
+                                            <button type="submit" class="btn btn-small btn-danger">Reject</button>
+                                        </form>
+                                    <% } else { %>
+                                        -
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>All Customers</h3>
+        <div class="users-table-container">
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Joined</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(user => { %>
+                        <tr>
+                            <td><%= user.firstName %> <%= user.lastName %></td>
+                            <td><code><%= user.username %></code></td>
+                            <td><%= user.email %></td>
+                            <td><%= user.phone %></td>
+                            <td><%= new Date(user.createdAt).toLocaleDateString() %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 SecureBank. All rights reserved.</p>
+    </footer>
+</body>
+</html>

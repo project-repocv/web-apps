@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Details - SecureBank</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1>🏦 SecureBank</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/accounts">Accounts</a></li>
+            <li><a href="/transfer">Transfer</a></li>
+            <li><a href="/transactions">Transactions</a></li>
+            <li><a href="/cards">Cards</a></li>
+            <li><a href="/loans">Loans</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/logout" class="logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-container">
+        <div class="account-detail-header">
+            <a href="/accounts" class="back-link">← Back to Accounts</a>
+            <h2>Account Details</h2>
+        </div>
+
+        <div class="account-card large">
+            <div class="account-header">
+                <span class="account-type"><%= account.type.toUpperCase() %></span>
+                <span class="account-status status-<%= account.status %>"><%= account.status %></span>
+            </div>
+            <div class="account-full-number"><%= account.accountNumber %></div>
+            <div class="account-balance">$<%= account.balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) %></div>
+            <div class="account-currency"><%= account.currency %></div>
+        </div>
+
+        <h3>Transaction History</h3>
+        <div class="transactions-table-container">
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (transactions.length === 0) { %>
+                        <tr>
+                            <td colspan="5" class="no-data">No transactions found</td>
+                        </tr>
+                    <% } else { %>
+                        <% transactions.forEach(transaction => { %>
+                            <tr>
+                                <td><%= new Date(transaction.timestamp).toLocaleDateString() %></td>
+                                <td><%= transaction.description %></td>
+                                <td>
+                                    <span class="transaction-type type-<%= transaction.type %>">
+                                        <%= transaction.type.toUpperCase() %>
+                                    </span>
+                                </td>
+                                <td class="<%= transaction.type %>">
+                                    <%= transaction.type === 'credit' ? '+' : '-' %>$<%= transaction.amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) %>
+                                </td>
+                                <td>$<%= transaction.balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) %></td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 SecureBank. All rights reserved.</p>
+    </footer>
+</body>
+</html>

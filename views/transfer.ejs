@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer Money - SecureBank</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1>🏦 SecureBank</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/accounts">Accounts</a></li>
+            <li><a href="/transfer">Transfer</a></li>
+            <li><a href="/transactions">Transactions</a></li>
+            <li><a href="/cards">Cards</a></li>
+            <li><a href="/loans">Loans</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/logout" class="logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-container">
+        <h2>Transfer Money</h2>
+        
+        <% if (error) { %>
+            <div class="alert alert-error"><%= error %></div>
+        <% } %>
+        
+        <% if (success) { %>
+            <div class="alert alert-success"><%= success %></div>
+        <% } %>
+
+        <div class="transfer-form-container">
+            <form action="/transfer" method="POST" class="auth-form">
+                <div class="form-group">
+                    <label for="fromAccount">From Account</label>
+                    <select id="fromAccount" name="fromAccount" required>
+                        <% accounts.forEach(account => { %>
+                            <option value="<%= account.id %>">
+                                <%= account.type.toUpperCase() %> - ****<%= account.accountNumber.slice(-4) %> 
+                                ($<%= account.balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) %>)
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="toAccountNumber">To Account Number</label>
+                    <input type="text" id="toAccountNumber" name="toAccountNumber" required 
+                           placeholder="Enter recipient account number" 
+                           pattern="[0-9]+" title="Account number must be numeric">
+                    <small>Hint: Use 1000000001 or 1000000003 for demo transfers</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Amount ($)</label>
+                    <input type="number" id="amount" name="amount" required 
+                           placeholder="0.00" step="0.01" min="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description (Optional)</label>
+                    <input type="text" id="description" name="description" 
+                           placeholder="What is this transfer for?">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Transfer Money</button>
+            </form>
+
+            <div class="transfer-info">
+                <h4>Quick Transfer Tips:</h4>
+                <ul>
+                    <li>Transfers are instant within SecureBank</li>
+                    <li>Double-check the account number before transferring</li>
+                    <li>You can view all transactions in the Transactions page</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 SecureBank. All rights reserved.</p>
+    </footer>
+</body>
+</html>
