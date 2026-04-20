@@ -1,9 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
 const path = require('path');
+const crypto = require('crypto');
+
+// Simple UUID generator for CommonJS
+const generateUUID = () => {
+    return crypto.randomUUID();
+};
 
 const app = express();
 const PORT = 3000;
@@ -36,7 +41,7 @@ function initializeData() {
     const userPassword = bcrypt.hashSync('user123', 10);
     
     const adminUser = {
-        id: uuidv4(),
+        id: generateUUID(),
         username: 'admin',
         password: adminPassword,
         email: 'admin@bank.com',
@@ -48,7 +53,7 @@ function initializeData() {
     };
     
     const regularUser = {
-        id: uuidv4(),
+        id: generateUUID(),
         username: 'john',
         password: userPassword,
         email: 'john@example.com',
@@ -63,7 +68,7 @@ function initializeData() {
     
     // Create accounts
     const adminAccount = {
-        id: uuidv4(),
+        id: generateUUID(),
         userId: adminUser.id,
         accountNumber: '1000000001',
         type: 'savings',
@@ -74,7 +79,7 @@ function initializeData() {
     };
     
     const userAccount1 = {
-        id: uuidv4(),
+        id: generateUUID(),
         userId: regularUser.id,
         accountNumber: '1000000002',
         type: 'checking',
@@ -85,7 +90,7 @@ function initializeData() {
     };
     
     const userAccount2 = {
-        id: uuidv4(),
+        id: generateUUID(),
         userId: regularUser.id,
         accountNumber: '1000000003',
         type: 'savings',
@@ -100,7 +105,7 @@ function initializeData() {
     // Create sample transactions
     const transactions = [
         {
-            id: uuidv4(),
+            id: generateUUID(),
             accountId: userAccount1.id,
             type: 'credit',
             amount: 5000.00,
@@ -109,7 +114,7 @@ function initializeData() {
             timestamp: new Date(Date.now() - 86400000 * 5)
         },
         {
-            id: uuidv4(),
+            id: generateUUID(),
             accountId: userAccount1.id,
             type: 'debit',
             amount: 200.00,
@@ -118,7 +123,7 @@ function initializeData() {
             timestamp: new Date(Date.now() - 86400000 * 3)
         },
         {
-            id: uuidv4(),
+            id: generateUUID(),
             accountId: userAccount1.id,
             type: 'debit',
             amount: 150.00,
@@ -127,7 +132,7 @@ function initializeData() {
             timestamp: new Date(Date.now() - 86400000 * 2)
         },
         {
-            id: uuidv4(),
+            id: generateUUID(),
             accountId: userAccount1.id,
             type: 'credit',
             amount: 350.00,
@@ -141,7 +146,7 @@ function initializeData() {
     
     // Create sample card
     db.cards.push({
-        id: uuidv4(),
+        id: generateUUID(),
         userId: regularUser.id,
         accountId: userAccount1.id,
         cardNumber: '4532-****-****-1234',
@@ -222,7 +227,7 @@ app.post('/register', (req, res) => {
     
     const hashedPassword = bcrypt.hashSync(password, 10);
     const newUser = {
-        id: uuidv4(),
+        id: generateUUID(),
         username,
         password: hashedPassword,
         email,
@@ -237,7 +242,7 @@ app.post('/register', (req, res) => {
     
     // Create default account
     const newAccount = {
-        id: uuidv4(),
+        id: generateUUID(),
         userId: newUser.id,
         accountNumber: `1000000${db.accounts.length + 1}`,
         type: 'checking',
@@ -325,7 +330,7 @@ app.post('/transfer', requireAuth, (req, res) => {
     
     // Record transactions
     db.transactions.push({
-        id: uuidv4(),
+        id: generateUUID(),
         accountId: fromAcc.id,
         type: 'debit',
         amount: transferAmount,
@@ -335,7 +340,7 @@ app.post('/transfer', requireAuth, (req, res) => {
     });
     
     db.transactions.push({
-        id: uuidv4(),
+        id: generateUUID(),
         accountId: toAcc.id,
         type: 'credit',
         amount: transferAmount,
@@ -374,7 +379,7 @@ app.post('/cards/request', requireAuth, (req, res) => {
     }
     
     const newCard = {
-        id: uuidv4(),
+        id: generateUUID(),
         userId: req.session.userId,
         accountId: account.id,
         cardNumber: `4532-****-****-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -398,7 +403,7 @@ app.post('/loans/apply', requireAuth, (req, res) => {
     const { loanType, amount, term } = req.body;
     
     const newLoan = {
-        id: uuidv4(),
+        id: generateUUID(),
         userId: req.session.userId,
         loanType,
         amount: parseFloat(amount),
