@@ -7,16 +7,15 @@ target/
 *.ear
 *.zip
 
+# Dependencies
+node_modules/
+
 # IDE
 .idea/
-*.iml
-*.ipr
-*.iws
 .vscode/
 
 # Logs
 *.log
-logs/
 
 # Environment
 .env
@@ -27,6 +26,7 @@ logs/
 .DS_Store
 Thumbs.db
 
-# Testing
-test-results/
+# Build artifacts
+build/
+dist/
 ```
